@@ -1,0 +1,3 @@
+[12:21:21 03.19.2024] [DEBUG] [123] - Database connection attempt failed retrying..
+[12:21:22 03.19.2024] [INFO] [123] - Database connection active: 12341231
+[12:21:22 03.19.2024] [ERROR] [42] - Database could not be reached error code: 1230102.

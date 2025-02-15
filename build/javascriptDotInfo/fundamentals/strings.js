@@ -76,4 +76,6 @@ function testUnaryPlusOnNumberLikeString(s) {
     console.log(s);
     console.log(+s);
     console.log(Number(s));
+    //testUnaryPlusOnNumberLikeString(" 4   ") // 4
+    // testUnaryPlusOnNumberLikeString("4px") // NAN
 }

@@ -1,6 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const strings_1 = require("./javascriptDotInfo/fundamentals/strings");
 //nameOfJavascript()
-(0, strings_1.testUnaryPlusOnNumberLikeString)(" 4   "); // 4
-(0, strings_1.testUnaryPlusOnNumberLikeString)("4px");
+console.log(0 / 2); // either NaN or 0
+funcDeclaration(1, 2);
+const funcExpression = function (a, b) {
+    if (typeof (a) == "string") {
+        return a + b;
+    }
+};
+function funcDeclaration(a, b) {
+    return a + b;
+}
+console.log(funcExpression(1, 2));
+console.log(funcDeclaration(1, 2));
