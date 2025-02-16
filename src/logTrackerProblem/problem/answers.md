@@ -1,7 +1,7 @@
 # Testing Axis
 ## Requirements Clarification 
 What is an entry? - As long as the string contains the log message it is considered an entry.
-What does select mean: One or more types, or all types if no key is provided
+What does select mean: a single given type, or all types if no key is provided (I did a combination of types for a challenge)
 
 ## Code Readability
 
@@ -15,3 +15,5 @@ Site 405, Site 555
 # return select log messages of a site
 clarifying requirements test
 enough to return a type, or all
+
+#

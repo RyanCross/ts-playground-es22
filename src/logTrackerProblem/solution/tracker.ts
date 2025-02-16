@@ -142,16 +142,13 @@ class Tracker {
 console.log(process.cwd())
 let tracker = new Tracker()
 
-// Validate function 1
+// Validate function 1: validate the 13 info logs returned
 assert.equal(tracker.getCountOfLogType(LOG_LEVEL.INFO), 13)
-// validate function 2
+// validate function 2 gets the two critical sites: 405, 555
 assert.equal(tracker.getProblematicSites().length, 2)
-
 // test function gets logs in from multiple files
 assert.equal(tracker.getSiteLogs(111, [LOG_LEVEL.INFO]).length, 3)
-
 // test multiple types
 assert.equal(tracker.getSiteLogs(111, [LOG_LEVEL.INFO, LOG_LEVEL.ERROR]).length, 4)
-
 // test no types provided returns all logs of site
 assert.equal(tracker.getSiteLogs(111).length, 5)
