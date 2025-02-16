@@ -1,5 +1,4 @@
 "use strict";
-//@ts-nocheck
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -24,10 +23,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = require("fs");
+const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const _ = __importStar(require("lodash"));
 const assert = __importStar(require("assert"));
+// 1. lets create some scaffolding
+// 2. examine the schema
+// Approach: Simplest version of problem
+// parse logs from one file
+// get 3 functions working
+// parse file - line by line
 var LOG_LEVEL;
 (function (LOG_LEVEL) {
     LOG_LEVEL["DEBUG"] = "DEBUG";
@@ -37,46 +42,44 @@ var LOG_LEVEL;
     LOG_LEVEL["CRITICAL"] = "CRITICAL";
 })(LOG_LEVEL || (LOG_LEVEL = {}));
 class Tracker {
-    entries;
     tracking;
     constructor() {
         this.tracking = new Map();
-        this.entries = this.parseLogs();
+        this.parseLogs();
     }
     parseLogs() {
         // how to read a directory
-        const filePath = path.join(__dirname, "../logs/a.log");
-        console.log(filePath);
-        // would require files to be copied over to build, which they are not
-        const buffer = (0, fs_1.readFileSync)("./src/logTrackerProblem/logs/a.log");
-        const logsRaw = buffer.toString();
-        const entriesRaw = logsRaw.split("\r\n");
-        console.log(logsRaw);
-        let entries = [];
-        // iterate through each line and parse into data structure
-        entriesRaw.forEach((e, i) => {
-            let logsByLvl = {
-                DEBUG: [],
-                INFO: [],
-                WARNING: [],
-                ERROR: [],
-                CRITICAL: []
-            };
-            const splitE = e.split(" ");
-            let logLvl = splitE[2]; //[INFO]
-            console.log(logLvl);
-            let siteId = splitE[3]; // [101]
-            // remove brackets, first and last char
-            siteId = siteId.substring(1, siteId.length - 1);
-            console.log(siteId);
-            logLvl = logLvl.substring(1, logLvl.length - 1);
-            console.log(logLvl);
-            // check if siteId exists, if not add entry to dict
-            if (!this.tracking.has(siteId)) {
-                this.tracking.set(siteId, _.cloneDeep(logsByLvl));
-            }
-            // add element to appropriate bucket
-            this.tracking.get(siteId)[logLvl].push(e);
+        console.log(process.cwd());
+        // join the absolute path of the executing processes' working dir ()
+        const logsDirectoryPath = path.join(process.cwd(), "src/logTrackerProblem/logs/");
+        console.log(logsDirectoryPath);
+        // read entire directory of files:
+        fs.readdirSync(logsDirectoryPath).forEach((file) => {
+            const filePath = path.join(process.cwd(), "src/logTrackerProblem/logs/", file);
+            console.log(filePath);
+            // would require files to be copied over to build, which they are not
+            const buffer = fs.readFileSync(filePath);
+            const logsRaw = buffer.toString();
+            const entriesRaw = logsRaw.split("\r\n");
+            // iterate through each line of the file and parse into data structure
+            entriesRaw.forEach((e, i) => {
+                let logsByLvl = {
+                    DEBUG: [],
+                    INFO: [],
+                    WARNING: [],
+                    ERROR: [],
+                    CRITICAL: []
+                };
+                const splitE = e.split(" ");
+                let logLvl = splitE[2].substring(1, splitE[2].length - 1); // INFO minus []
+                let siteId = parseInt(splitE[3].substring(1, splitE[3].length - 1)); // e.g 101 minus []
+                // check if siteId exists, if not add entry to dict
+                if (!this.tracking.has(siteId)) {
+                    this.tracking.set(siteId, _.cloneDeep(logsByLvl));
+                }
+                // add element to appropriate bucket
+                this.tracking.get(siteId)?.[logLvl].push(e);
+            });
         });
     }
     getCountOfLogType(logLevel) {
@@ -86,14 +89,51 @@ class Tracker {
         });
         return totalOfType;
     }
-    getCriticalLogs() {
+    //@ts-ignore
+    getSiteLogs(siteId, logType) {
+        const siteLogs = [];
+        // if site exists and types were provided
+        if (this.tracking.has(siteId)) {
+            const site = this.tracking.get(siteId);
+            if (site) {
+                if (logType && logType.length > 1) {
+                    for (let k of logType) {
+                        site[k].forEach((v) => {
+                            siteLogs.push(v);
+                        });
+                    }
+                } // optional case
+                else if (logType === undefined || logType.length === 0) {
+                    for (let k of Object.keys(LOG_LEVEL)) {
+                        site[k].forEach((v) => {
+                            siteLogs.push(v);
+                        });
+                    }
+                }
+            }
+        }
+        return siteLogs;
     }
     /**
      * @returns Sites with 3 or more errors
      */
     getProblematicSites() {
+        let problematicSites = [];
+        this.tracking.forEach((v, k) => {
+            if (v.CRITICAL.length >= 3) {
+                problematicSites.push(k);
+            }
+        });
+        return problematicSites;
     }
 }
 console.log(process.cwd());
 let tracker = new Tracker();
-assert.equal(tracker.getCountOfLogType("INFO"), 3); // for a .log
+assert.equal(tracker.getCountOfLogType(LOG_LEVEL.INFO), 13); // for a .log
+assert.equal(tracker.getProblematicSites().length, 2);
+// test function gets logs in from multiple files
+assert.equal(tracker.getSiteLogs(111, [LOG_LEVEL.INFO]).length, 3);
+// test multiple types
+assert.equal(tracker.getSiteLogs(111, [LOG_LEVEL.INFO, LOG_LEVEL.ERROR]).length, 4);
+// test no types provided returns all logs of site
+assert.equal(tracker.getSiteLogs(111).length, 5);

@@ -8,3 +8,5 @@
 [08:23:48 02.06.2025] [DEBUG] [304] - API request received.
 [08:24:59 02.06.2025] [WARNING] [405] - Low disk space warning.
 [08:26:11 02.06.2025] [INFO] [101] - User logout successful.
+[08:27:14 02.06.2025] [CRITICAL] [405] - System failure: shutting down.
+[08:28:14 02.06.2025] [CRITICAL] [405] - System failure: shutting down.
