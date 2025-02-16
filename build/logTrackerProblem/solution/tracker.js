@@ -80,7 +80,7 @@ class Tracker {
         });
     }
     getCountOfLogType(logLevel) {
-        let totalOfType;
+        let totalOfType = 0;
         this.tracking.forEach((logsByLvl) => {
             totalOfType += logsByLvl[logLevel].length;
         });
