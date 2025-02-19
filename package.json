@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx tsc && node build/index.js",
     "tracker": "npx tsc && node build/logTrackerProblem/solution/tracker.js",
-    "debug": "npx ts-node src/logTrackerProblem/solution/tracker.ts"
+    "debug": "npx ts-node src/logTrackerProblem/solution/tracker.ts",
+    "books": "npx ts-node src/interviewPrep/goodLookingBooks.ts"
   },
   "author": "Ryan Cross",
   "license": "ISC",
