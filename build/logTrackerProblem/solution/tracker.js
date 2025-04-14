@@ -96,7 +96,7 @@ class Tracker {
         if (this.tracking.has(siteId)) {
             const site = this.tracking.get(siteId);
             if (site) {
-                if (logType && logType.length > 1) {
+                if (logType && logType.length >= 1) {
                     for (let k of logType) {
                         site[k].forEach((v) => {
                             siteLogs.push(v);
@@ -129,7 +129,9 @@ class Tracker {
 }
 console.log(process.cwd());
 let tracker = new Tracker();
-assert.equal(tracker.getCountOfLogType(LOG_LEVEL.INFO), 13); // for a .log
+// Validate function 1: validate the 13 info logs returned
+assert.equal(tracker.getCountOfLogType(LOG_LEVEL.INFO), 13);
+// validate function 2 gets the two critical sites: 405, 555
 assert.equal(tracker.getProblematicSites().length, 2);
 // test function gets logs in from multiple files
 assert.equal(tracker.getSiteLogs(111, [LOG_LEVEL.INFO]).length, 3);
