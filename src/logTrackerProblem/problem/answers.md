@@ -6,7 +6,6 @@ What does select mean: a single given type, or all types if no key is provided (
 ## Code Readability
 
 
-
 # Sites with 3 or more critical errors
 Site 405, Site 555
 
