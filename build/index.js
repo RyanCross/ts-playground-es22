@@ -14,10 +14,11 @@ function funcDeclaration(a, b) {
 }
 console.log(funcExpression(1, 2));
 console.log(funcDeclaration(1, 2));
-(0, async_1.validatePromiseExecutorImmediatelyInvoked)();
-console.log("Still in code");
-// inspectPromiseStruct()
-// testResult()
-// testDelay(3000)
-(0, async_1.microVsMacrotask)();
+// validatePromiseExecutorImmediatelyInvoked()
+// console.log("Still in code")
+// // inspectPromiseStruct()
+// // testResult()
+// // testDelay(3000)
+// microVsMacrotask()
+(0, async_1.catchingErrors)();
 // the process seems to exit 

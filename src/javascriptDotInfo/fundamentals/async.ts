@@ -1,3 +1,5 @@
+import { initial } from "lodash"
+
 export function validatePromiseExecutorImmediatelyInvoked() {
     /** The promise executor is invoked when constructed */
 
@@ -16,9 +18,9 @@ export function inspectPromiseStruct() {
         console.log("invoking pokemon promise executor")
         // executor is invoked immediately
         fetch("https://pokeapi.co/api/v2/pokemon/charmander1")
-        .finally(() => console.log("done executing fetch"))
-        .then((result) => resolve(result))
-        .catch((err) => reject(err)) 
+            .finally(() => console.log("done executing fetch"))
+            .then((result) => resolve(result))
+            .catch((err) => reject(err))
 
 
     }).then((result) => {
@@ -31,14 +33,14 @@ export function inspectPromiseStruct() {
 }
 
 export function testResult() {
-    let promise = new Promise(function(resolve, reject) {
+    let promise = new Promise(function (resolve, reject) {
         resolve(1);
-      
+
         setTimeout(() => resolve(2), 1000);
-      });
-      
-      promise.then(console.log);
-      
+    });
+
+    promise.then(console.log);
+
 }
 
 /**
@@ -64,4 +66,23 @@ export async function microVsMacrotask() {
     }
     await logMicro()
 }
-  
+
+export async function catchingErrors() {
+    new Promise(function (resolve, reject) {
+        setTimeout(() => {
+            reject(new Error("whoops"))
+        }, 1000);
+    })
+        .catch((result) => console.log("handled"));
+}
+
+
+interface Extractor<T, V> {
+    initialize(): Promise<void>;
+    extract(event: T, out: V): V
+    can_extract: (event: T) => boolean;
+}
+
+
+
+
